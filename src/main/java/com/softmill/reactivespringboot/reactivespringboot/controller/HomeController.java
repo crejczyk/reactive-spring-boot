@@ -1,6 +1,8 @@
 package com.softmill.reactivespringboot.reactivespringboot.controller;
 
 import java.io.IOException;
+import java.time.Duration;
+import java.util.List;
 
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.softmill.reactivespringboot.reactivespringboot.model.Image;
 import com.softmill.reactivespringboot.reactivespringboot.service.ImageService;
 
 import reactor.core.publisher.Flux;
@@ -35,10 +38,17 @@ public class HomeController {
 		this.imageService = imageService;
 	}
 
-	@GetMapping("/")
-	public Mono<String> index(Model model) {
+	@GetMapping("/async")
+	public Mono<String> async(Model model) {
 		model.addAttribute("images", imageService.findAllImages());
 		return Mono.just("index");
+	}
+
+	@GetMapping("/sync")
+	public String sync(Model model) {
+		List<Image> imageList = imageService.findAllImages().collectList().block(Duration.ofSeconds(10));
+		model.addAttribute("images", imageList);
+		return "index";
 	}
 
 	@GetMapping(value = BASE_PATH + "/" + FILENAME + "/raw", produces = MediaType.IMAGE_JPEG_VALUE)

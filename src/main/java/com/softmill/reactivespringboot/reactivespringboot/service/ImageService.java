@@ -26,7 +26,7 @@ import reactor.core.publisher.Mono;
 @Service
 public class ImageService {
 
-	private static String UPLOAD_ROOT = "upload-dir";
+	public static String UPLOAD_ROOT = "upload-dir";
 
 	private final ResourceLoader resourceLoader;
 
