@@ -1,37 +1,84 @@
 package com.softmill.reactivespringboot.reactivespringboot;
 
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.autoconfigure.thymeleaf.ThymeleafProperties;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import java.util.Arrays;
+import java.util.List;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.context.event.EventListener;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.softmill.reactivespringboot.reactivespringboot.model.Image;
+import com.softmill.reactivespringboot.reactivespringboot.model.Tweet;
+import com.softmill.reactivespringboot.reactivespringboot.model.User;
+import com.softmill.reactivespringboot.reactivespringboot.repository.TweetRepository;
+import com.softmill.reactivespringboot.reactivespringboot.repository.UserRepository;
+
+import reactor.core.publisher.Flux;
 
 @Configuration
 public class LoadDatabase {
+	
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(LoadDatabase.class);
+    
+    private final TweetRepository tweetRepository;
+    private final UserRepository usersRepository;
+    private final PasswordEncoder passwordEncoder;
 
-	/*
-	 * @Bean CommandLineRunner init(ChapterRepository repository) { return args -> {
-	 * Flux.just( new Chapter("Quick Start with Java"), new
-	 * Chapter("Reactive Web with Spring Boot"), new Chapter("...and more!"))
-	 * .flatMap(repository::save) .subscribe(System.out::println); }; }
-	 */
-
-	@Bean
-	CommandLineRunner init(MongoOperations operations) {
-		return args -> {
-			operations.dropCollection(Image.class);
-
-			operations.insert(new Image("1", "learning-spring-boot-cover.jpg"));
-			operations.insert(new Image("2", "learning-spring-boot-2nd-edition-cover.jpg"));
-			operations.insert(new Image("3", "bazinga.png"));
-
-			operations.findAll(Image.class).forEach(image -> {
-				System.out.println(image.toString());
-			});
-		};
+ 
+	public LoadDatabase(TweetRepository tweetRepository, UserRepository users, PasswordEncoder passwordEncoder) {
+		this.tweetRepository = tweetRepository;
+		this.usersRepository = users;
+		this.passwordEncoder = passwordEncoder;
 	}
 
+	@EventListener(value = ContextRefreshedEvent.class)
+	void init() {
+		initTweets();
+		initUsers();
+	}
+
+    private void initUsers() {
+		log.info("start users initialization  ...");
+		this.usersRepository
+            .deleteAll()
+            .thenMany(
+                Flux
+                    .just("user", "admin")
+                    .flatMap(
+                        username -> {
+                            List<String> roles = "user".equals(username)
+                            ? Arrays.asList("ROLE_USER")
+                            : Arrays.asList("ROLE_USER", "ROLE_ADMIN");
+                            User user = new User(username,passwordEncoder.encode("password"),roles);
+                            return this.usersRepository.save(user);
+                        }
+                    )
+            )
+            .log()
+            .subscribe(
+                null,
+                null,
+                () -> log.info("done users initialization...")
+            );
+    }
+    
+    private void initTweets() {
+        log.info("start data initialization  ...");
+        this.tweetRepository
+            .deleteAll()
+            .thenMany(
+                Flux
+                    .just("Tweet one", "Tweet two")
+                    .flatMap(
+                        text -> this.tweetRepository.save(new Tweet(text))
+                    )
+            )
+            .log()
+            .subscribe(
+                null,
+                null,
+                () -> log.info("done initialization...")
+            );
+    }
 }
