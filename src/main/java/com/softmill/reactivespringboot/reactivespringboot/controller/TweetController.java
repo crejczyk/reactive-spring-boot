@@ -1,5 +1,7 @@
 package com.softmill.reactivespringboot.reactivespringboot.controller;
 
+import java.time.Duration;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,6 +65,6 @@ public class TweetController {
 
 	@GetMapping(value = "/stream/tweets", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
 	public Flux<Tweet> streamAllTweets() {
-		return tweetRepository.findAll();
+		return tweetRepository.findAll().delayElements(Duration.ofMillis(100));
 	}
 }

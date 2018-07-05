@@ -1,47 +1,70 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8" />
-    <title>Learning Spring Boot: Spring-a-Gram</title>
-    <link rel="stylesheet" href="/main.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <style>
+        h4 {
+            color: blue;
+        }
+        .center {
+            text-align: center;
+            border: 3px solid green;
+        }
+        #tweets-table {
+            font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+        #tweets-table th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: cornflowerblue;
+            color: white;
+        }
+        #tweets-table td, #tweets-table th {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        #pets-table tr:nth-child(even){background-color: #f2f2f2;}
+    </style>
+
 </head>
 <body>
 
-<h1>Learning Spring Boot - 2nd Edition</h1>
-
-<div>
-    <table>
-        <thead>
-        <tr>
-            <th>Id</th><th>Name</th><th>Image</th><th></th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="image : ${images}">
-            <td th:text="${image.id}" />
-            <td th:text="${image.name}" />
-            <td>
-                <a th:href="@{'/images/' + ${image.name} + '/raw'}">
-                    <img th:src="@{'/images/'+${image.name}+'/raw'}"
-                         class="thumbnail" />
-                </a>
-            </td>
-            <td>
-                <form th:method="delete"
-                      th:action="@{'/images/' + ${image.name}}">
-                    <input type="submit" value="Delete" />
-                </form>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-
-    <form method="post" enctype="multipart/form-data"
-          action="/images">
-        <p><input type="file" name="file" /></p>
-        <p><input type="submit" value="Upload" /></p>
-    </form>
+<div class="container">
+    <h4 style="text-align: center">Tweets Monitoring</h4>
+    <div class="table-responsive">
+        <table class="table" id="tweets-table">
+            <tr>
+                <th>id</th>
+                <th>text</th>
+                <th>date</th>
+            </tr>
+        </table>
+    </div>
 </div>
+
+<script>
+	var	tableArray=[];
+    var evtSource = new EventSource("stream/tweets");
+    evtSource.onmessage = function (event) {
+        var data = JSON.parse(event.data);
+        var table = document.getElementById("tweets-table");
+        if (tableArray.indexOf(data.id)==-1) {
+        	tableArray.push(data.id);
+            var row = table.insertRow(1);
+            var cell1 = row.insertCell(0);
+            var cell2 = row.insertCell(1);
+            var cell3 = row.insertCell(2);
+            cell1.innerHTML = '<td>' + data.id + '</td>';
+            cell2.innerHTML = '<td>' + data.text + '</td>';
+            cell3.innerHTML = '<td>' + data.createdAt + '</td>';
+        }
+    }
+</script>
 
 </body>
 </html>

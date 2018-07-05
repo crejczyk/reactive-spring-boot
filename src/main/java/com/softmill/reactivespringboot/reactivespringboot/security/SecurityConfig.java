@@ -30,11 +30,12 @@ class SecurityConfig {
     @Bean
     SecurityWebFilterChain springWebFilterChain(ServerHttpSecurity http) throws Exception {
         return http
+        		.csrf().disable()
                 .authorizeExchange()
-                .pathMatchers(HttpMethod.GET, "/tweets/**").permitAll()
-                .pathMatchers(HttpMethod.DELETE, "/tweets/**").hasRole("ADMIN")
-                .pathMatchers("/users/{user}/**").access(this::currentUserMatchesPath)
-                .anyExchange().authenticated()
+                //.pathMatchers(HttpMethod.GET, "/tweets/**").permitAll()
+                //.pathMatchers(HttpMethod.DELETE, "/tweets/**").hasRole("ADMIN")
+                //.pathMatchers("/users/{user}/**").access(this::currentUserMatchesPath)
+                .anyExchange().permitAll()
                 .and()
                 .build();
     }

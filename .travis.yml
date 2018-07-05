@@ -1,0 +1,20 @@
+language: java
+jdk:
+ - oraclejdk8
+sudo: false
+
+addons:
+  sonarcloud:
+    organization: "crejczyk-github"
+    token:
+      secure: "db8a751d3c718fd8eb5a23239bb715a7b1a22d2a"
+      
+cache:
+  directories:
+    - '$HOME/.m2/repository'
+    - '$HOME/.sonar/cache'
+    
+install: true
+
+after_success:
+  - mvn clean verify -Pjacoco org.eluder.coveralls:coveralls-maven-plugin:report sonar:sonar
