@@ -1,5 +1,7 @@
 [![Build Status](https://travis-ci.org/crejczyk/reactive-spring-boot.svg?branch=master)](https://travis-ci.org/crejczyk/reactive-spring-boot)
-[![GitHub license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/sqshq/PiggyMetrics/blob/master/LICENCE)
+[![GitHub license](https://img.shields.io/github/license/mashape/apistatus.svg)]
+[![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=com.softmill.reactivespringboot%3Areactive-spring-boot&metric=alert_status)]
+
 ## reactive-spring-boot
 
 
