@@ -20,4 +20,4 @@ services: mongodb
 script: "mvn test -B"
 
 after_success:
-mvn sonar:sonar -Dsonar.organization=crejczyk-github -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=8a8d1cef333dd947418ef45e316b2fa839ed2574
+ - mvn sonar:sonar -Dsonar.organization=crejczyk-github -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=8a8d1cef333dd947418ef45e316b2fa839ed2574
