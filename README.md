@@ -1,4 +1,4 @@
-"# reactive-spring-boot"
+## reactive-spring-boot
 
 
 ## Requirements
@@ -20,7 +20,7 @@ mvn spring-boot:run
 
 The server will start at <http://localhost:9000>.
 
-## Exploring the Rest APIs
+## Exploring the Rest API
 
 The application defines following REST APIs
 
@@ -35,5 +35,5 @@ The application defines following REST APIs
 
 4. DELETE /tweets/{id} - Delete a Tweet
 
-4. GET /stream/tweets - Stream tweets to a browser as Server-Sent Events
+4. GET /stream/tweets - Stream tweets to the browser
 ```
