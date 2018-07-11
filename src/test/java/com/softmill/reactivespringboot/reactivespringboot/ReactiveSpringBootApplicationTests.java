@@ -40,7 +40,7 @@ public class ReactiveSpringBootApplicationTests {
 				.expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
 				.expectBody()
                 .jsonPath("$.id").isNotEmpty()
-                .jsonPath("$.text").isEqualTo("This is a Test Tweet");
+                .jsonPath("$.text").isEqualTo("Test Tweet");
 	}
 
 	@Test
@@ -55,7 +55,7 @@ public class ReactiveSpringBootApplicationTests {
 
     @Test
     public void testGetSingleTweet() {
-        Tweet tweet = tweetRepository.save(new Tweet("Hello, World!")).block();
+        Tweet tweet = tweetRepository.save(new Tweet("Hello !")).block();
 
         webTestClient.get()
                 .uri("/tweets/{id}", Collections.singletonMap("id", tweet.getId()))
