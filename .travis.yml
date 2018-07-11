@@ -16,5 +16,7 @@ cache:
     
 install: true
 
+script: "mvn test -B"
+
 after_success:
   - mvn clean verify -Pjacoco org.eluder.coveralls:coveralls-maven-plugin:report sonar:sonar
