@@ -16,6 +16,7 @@ cache:
     
 install: true
 
+services: mongodb
 script: "mvn test -B"
 
 after_success:

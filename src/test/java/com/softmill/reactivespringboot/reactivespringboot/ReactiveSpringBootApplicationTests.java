@@ -27,10 +27,9 @@ public class ReactiveSpringBootApplicationTests {
 	@Autowired
     TweetRepository tweetRepository;
 
-	@Ignore
 	@Test
 	public void testCreateTweet() {
-		Tweet tweet = new Tweet("This is a Test Tweet");
+		Tweet tweet = new Tweet("Test Tweet");
 
 		webTestClient.post().uri("/tweets")
 				.contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -44,7 +43,6 @@ public class ReactiveSpringBootApplicationTests {
                 .jsonPath("$.text").isEqualTo("This is a Test Tweet");
 	}
 
-	@Ignore
 	@Test
     public void testGetAllTweets() {
 	    webTestClient.get().uri("/tweets")
@@ -55,7 +53,6 @@ public class ReactiveSpringBootApplicationTests {
                 .expectBodyList(Tweet.class);
     }
 
-	@Ignore
     @Test
     public void testGetSingleTweet() {
         Tweet tweet = tweetRepository.save(new Tweet("Hello, World!")).block();
