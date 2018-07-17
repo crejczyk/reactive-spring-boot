@@ -3,7 +3,6 @@ package com.softmill.reactivespringboot.reactivespringboot;
 import java.util.Collections;
 
 import org.assertj.core.api.Assertions;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
