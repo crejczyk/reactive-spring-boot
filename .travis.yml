@@ -7,7 +7,7 @@ addons:
   sonarcloud:
     organization: "crejczyk-github"
     token:
-      secure: "4a8649d749104fceb64331b6f7c4244d2712b07e"
+      secure: "8a8d1cef333dd947418ef45e316b2fa839ed2574"
       
 cache:
   directories:
@@ -17,7 +17,6 @@ cache:
 install: true
 
 services: mongodb
-script: "mvn test -B"
-
-after_success:
- - mvn sonar:sonar -Dsonar.organization=crejczyk-github -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=8a8d1cef333dd947418ef45e316b2fa839ed2574
+script:
+  # JaCoCo is used to have code coverage, the agent has to be activated
+  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar
