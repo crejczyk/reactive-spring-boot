@@ -1,0 +1,30 @@
+version: '3'
+services:
+  docker-mongo:
+    image: mongo:3.4
+    hostname: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodata:/data/db mongo
+    networks:
+      - network-reactive
+
+  spring-boot-reactive:
+    build:
+      context: ../
+    image: reactive-spring-boot
+    ports:
+      - "9000:9000"
+    links:
+      - docker-mongo   
+    networks:
+      - network-reactive
+    environment:
+      - SPRING_DATA_MONGODB_HOST=docker-mongo
+      
+volumes:
+  mongodata:
+
+networks:
+  network-reactive:

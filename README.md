@@ -20,11 +20,6 @@
 mvn jacoco:report
 ```
 
-## Run MONGO using Docker for Windows
-- `docker volume create --name=mongodata` 
-- `docker run -d -p 27017:27017 -v mongodata:/data/db mongo`
-
-
 ```bash
 mvn spring-boot:run
 ```
@@ -48,3 +43,21 @@ The application defines following REST APIs
 
 6. GET /stream/tweets - Stream tweets to the browser
 ```
+
+# Docker integration
+
+## Dockerfile
+
+### Run MONGO using Docker for Windows
+- `docker volume create --name=mongodata` 
+- `docker run -d -p 27017:27017 -v mongodata:/data/db mongo`
+
+### Building the Docker image
+- `docker build -t reactive-spring-boot .` 
+
+### Running the docker image in the background, in detached mode
+- `docker run -p 9000:9000 reactive-spring-boot`
+
+## Docker Compose(/docker)
+
+- `docker-compose up`
